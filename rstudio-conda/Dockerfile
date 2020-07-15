@@ -1,9 +1,11 @@
 # Start with studio and tidyverse
-FROM rocker/tidyverse
+FROM rocker/rstudio
 
 # Add miniconda
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH /opt/conda/bin:$PATH
+ENV RSTUDIO_WHICH_R /opt/conda/bin/R
+ENV RETICULATE_PYTHON /opt/conda/bin/python
 
 RUN apt-get update --fix-missing && \
     apt-get install -y wget bzip2 ca-certificates curl git && \
@@ -16,15 +18,11 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86
     /opt/conda/bin/conda clean -tipsy && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc 
+    conda config --add channels defaults && \
+    conda config --add channels bioconda && \
+    conda config --add channels conda-forge && \
+    echo "conda activate base" >> ~/.bashrc && \
+    conda install -y "r-base>=4.0"  && \ 
+    sed -i "s#rsession-which-r=.*#rsession-which-r=/opt/conda/bin/R#g" /etc/rstudio/rserver.conf
 
-# Install python packages and jupyterlab extensions
-RUN conda install -c conda-forge -y -n base jupytext altair black jupyterlab_code_formatter && \
-    jupyter labextension install @ryantam626/jupyterlab_code_formatter && \
-    jupyter serverextension enable --py jupyterlab_code_formatter && \
-    jupyter lab build
-
-EXPOSE 8888
-
-CMD ["jupyter", "lab", "--port=8888", "--ip=0.0.0.0", "--no-browser","--allow-root"]
-
+CMD ["/init"]
