@@ -1,0 +1,14 @@
+version: "3.9"  
+services:
+  rstudio:
+    build: .
+    ports:
+      - "8889:8787"
+    volumes:
+      - /home/sturm/anaconda3/envs/R400:/home/sturm/anaconda3/envs/R400
+      - /home/sturm/.rstudio/monitored/user-settings:/home/rstudio/.rstudio/monitored/user-settings
+      - /home/sturm/projects:/home/rstudio/projects
+    environment:
+      - PASSWORD=notsafe
+      - CONDAENV=/home/sturm/anaconda3/envs/R400
+

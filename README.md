@@ -14,7 +14,7 @@ The `--format docker` is required to set-up the bash shell.
 conda will not work with `sh`. 
 
 ```bash
-podman build --format docker . -t grst/rtudio-conda:latest
+podman build --format docker . -t grst/rstudio-conda:latest
 ```
 
 ### Run rstudio using podman
