@@ -7,6 +7,9 @@ export RETICULATE_PYTHON=${CONDAENV}/bin/python
 
 echo rsession-which-r=${RSTUDIO_WHICH_R} > /etc/rstudio/rserver.conf
 echo rsession-ld-library-path=${CONDAENV}/lib >> /etc/rstudio/rserver.conf
+echo auth-minimum-user-id=0 >> /etc/rstudio/rserver.conf
 echo "R_LIBS_USER=${CONDAENV}/lib/R/library" > /home/rstudio/.Renviron
+
+# echo "root:$PASSWORD" | chpasswd
 
 /init
